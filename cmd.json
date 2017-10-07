@@ -7,7 +7,7 @@
         {
           "type": "basic",
           "from": {
-            "key_code": "control",
+            "key_code": "CONTROL_L",
             "modifiers": {
               "optional": [
                 "any"
@@ -16,7 +16,7 @@
           },
           "to": [
             {
-              "key_code": "left_command"
+              "key_code": "COMMAND_L"
             }
           ],
           "conditions": [
@@ -31,7 +31,7 @@
         {
           "type": "basic",
           "from": {
-            "key_code": "command",
+            "key_code": "COMMAND_L",
             "modifiers": {
               "optional": [
                 "any"
@@ -40,7 +40,55 @@
           },
           "to": [
             {
-              "key_code": "left_control"
+              "key_code": "CONTROL_L"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.microsoft\\.rdc\\.mac$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "CONTROL_R",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "COMMAND_R"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.microsoft\\.rdc\\.mac$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "COMMAND_L",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "COMMAND_R"
             }
           ],
           "conditions": [
