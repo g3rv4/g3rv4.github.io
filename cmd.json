@@ -7,7 +7,7 @@
         {
           "type": "basic",
           "from": {
-            "key_code": "CONTROL_L",
+            "key_code": "left_control",
             "modifiers": {
               "optional": [
                 "any"
@@ -16,7 +16,7 @@
           },
           "to": [
             {
-              "key_code": "COMMAND_L"
+              "key_code": "left_command"
             }
           ],
           "conditions": [
@@ -31,7 +31,7 @@
         {
           "type": "basic",
           "from": {
-            "key_code": "COMMAND_L",
+            "key_code": "left_command",
             "modifiers": {
               "optional": [
                 "any"
@@ -40,7 +40,7 @@
           },
           "to": [
             {
-              "key_code": "CONTROL_L"
+              "key_code": "left_control"
             }
           ],
           "conditions": [
@@ -55,7 +55,7 @@
         {
           "type": "basic",
           "from": {
-            "key_code": "CONTROL_R",
+            "key_code": "right_control",
             "modifiers": {
               "optional": [
                 "any"
@@ -64,7 +64,7 @@
           },
           "to": [
             {
-              "key_code": "COMMAND_R"
+              "key_code": "right_command"
             }
           ],
           "conditions": [
@@ -79,7 +79,7 @@
         {
           "type": "basic",
           "from": {
-            "key_code": "COMMAND_L",
+            "key_code": "right_command",
             "modifiers": {
               "optional": [
                 "any"
@@ -88,7 +88,7 @@
           },
           "to": [
             {
-              "key_code": "COMMAND_R"
+              "key_code": "right_control"
             }
           ],
           "conditions": [
