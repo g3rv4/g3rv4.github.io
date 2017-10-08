@@ -1,13 +1,13 @@
 {
-  "title": "Shift+esc=~",
+  "title": "Shift+backspace=del",
   "rules": [
     {
-      "description": "Shift+esc=~",
+      "description": "Shift+backspace=del",
       "manipulators": [
         {
           "type": "basic",
           "from": {
-            "key_code": "escape",
+            "key_code": "delete_or_backspace",
             "modifiers": {
               "mandatory": [
                 "left_shift"
@@ -16,10 +16,7 @@
           },
           "to": [
             {
-              "key_code": "grave_accent_and_tilde",
-              "modifiers": [
-                "left_shift"
-              ]
+              "key_code": "delete_forward"
             }
           ]
         }
