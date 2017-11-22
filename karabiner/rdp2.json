@@ -103,26 +103,29 @@
       ]
     },
     {
-      "description": "cmd+left, cmd+right",
+      "description": "home, end",
       "manipulators": [
         {
           "type": "basic",
           "from": {
-            "key_code": "left_arrow",
+            "key_code": "home",
             "modifiers": {
-              "mandatory": [
-                "left_control"
+              "optional": [
+                "any"
               ]
             }
           },
           "to": [
             {
-              "key_code": "home"
+              "key_code": "left_arrow",
+              "modifiers": {
+                "mandatory": "left_command"
+              }
             }
           ],
           "conditions": [
             {
-              "type": "frontmost_application_if",
+              "type": "frontmost_application_unless",
               "bundle_identifiers": [
                 "^com\\.microsoft\\.rdc\\.mac$"
               ]
@@ -132,21 +135,24 @@
         {
           "type": "basic",
           "from": {
-            "key_code": "right_arrow",
+            "key_code": "end",
             "modifiers": {
-              "mandatory": [
-                "left_control"
+              "optional": [
+                "any"
               ]
             }
           },
           "to": [
             {
-              "key_code": "end"
+              "key_code": "rigth_arrow",
+              "modifiers": {
+                "mandatory": "left_command"
+              }
             }
           ],
           "conditions": [
             {
-              "type": "frontmost_application_if",
+              "type": "frontmost_application_unless",
               "bundle_identifiers": [
                 "^com\\.microsoft\\.rdc\\.mac$"
               ]
