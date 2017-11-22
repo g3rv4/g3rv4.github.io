@@ -144,7 +144,7 @@
           },
           "to": [
             {
-              "key_code": "rigth_arrow",
+              "key_code": "right_arrow",
               "modifiers": {
                 "mandatory": "left_command"
               }
