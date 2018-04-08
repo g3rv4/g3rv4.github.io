@@ -1,0 +1,1665 @@
+
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <title>(Dev) Transifex - Stack Overflow</title>
+        <link rel="shortcut icon" href="https://cdn-dev.sstatic.net/Sites/stackoverflow/img/favicon.ico?v=4f32ecc8f43d">
+        <link rel="apple-touch-icon image_src" href="https://cdn-dev.sstatic.net/Sites/stackoverflow/img/apple-touch-icon.png?v=c78bd457575a">
+        <link rel="search" type="application/opensearchdescription+xml" title="Stack Overflow" href="/opensearch.xml">
+        <meta name="referrer" content="origin" />
+
+
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="https://dev.stackoverflow.com/cm/translation/transifex"/>
+        <meta property="og:image" itemprop="image primaryImageOfPage" content="https://cdn-dev.sstatic.net/Sites/stackoverflow/img/apple-touch-icon@2.png?v=73d79a89bded" />
+        <meta name="twitter:card" content="summary"/>
+        <meta name="twitter:domain" content="dev.stackoverflow.com"/>
+        <meta name="twitter:title" property="og:title" itemprop="title name" content="Transifex" />
+        <meta name="twitter:description" property="og:description" itemprop="description" content="Teh new twitterz description" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+        <script src="https://cdn-dev.sstatic.net/Js/stub.en.js?v=65fa08d39bcd"></script>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn-dev.sstatic.net/Shared/stacks.css?v=bb810ef78683">
+        <link rel="stylesheet" type="text/css" href="https://cdn-dev.sstatic.net/Sites/stackoverflow/primary.css?v=ec9c7a89f898">
+            <link rel="stylesheet" type="text/css" href="https://cdn-dev.sstatic.net/Sites/stackoverflow/secondary.css?v=228390acb8a7">
+    
+    <script>
+        function reattachHandlers() {
+            $('form.transifex').off('submit').on('submit', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            $('form.transifex input[type=button]').off('click').on('click', function(e) {
+                var $button = $(this);
+                var $messages = $('#messages');
+                var $form = $($button.closest('form.transifex'));
+                var formData = $form.serialize();
+                if (!$button.data('confirm') || confirm($button.data('confirm'))) {
+                    var $disabled = $('form.transifex input, form.transifex select').disable();
+                    $messages.text($button.val()).addSpinner();
+                    $.ajax({
+                            type: "POST",
+                            url: $button.data('action'),
+                            data: formData
+                        })
+                        .error(function(req, textStatus, errorThrown) {
+                            $messages.text(textStatus + ": " + errorThrown);
+                        })
+                        .success(function(html) {
+                            $messages.remove();
+                            $(html).find('#messages').appendTo('#mainbar-full');
+                        })
+                        .always(function() {
+                            StackExchange.helpers.removeSpinner();
+                            $disabled.enable();
+                            reattachHandlers();
+                        });
+                }
+                e.preventDefault();
+                return false;
+            });
+            $('td.hash[title]').off('click', toggleTitle).on('click', toggleTitle).each(toggleTitle);
+        };
+
+        function toggleTitle (e) {
+            var td = $(this);
+            var textNode = td.contents().first();
+            var text = textNode.text();
+            textNode.replaceWith(document.createTextNode(td.attr('title')));
+            td.attr('title', text);
+            if (e && e.preventDefault) {
+                e.preventDefault();
+                return false;
+            }
+        };
+
+        StackExchange.ready(reattachHandlers);
+    </script>
+    <style>
+        #content {
+            width: 1500px;
+        }
+
+        .main-table {
+            max-width: 100%;
+        }
+
+        .main-table tr {
+            border-bottom: solid 1px lightgray;
+        }
+
+        #content h2 {
+            margin-top: 1.5em;
+            cursor: pointer;
+        }
+
+        .main-table .hash {
+            max-width: 500px;
+            width: 500px;
+        }
+
+        .main-table td.hash {
+            font-family: Consolas;
+            cursor: pointer;
+        }
+
+        .main-table .db, .main-table .import {
+            max-width: 500px;
+            width: 500px;
+        }
+
+        .main-table .ovr {
+            max-width: 50px;
+            width: 50px;
+        }
+    </style>
+
+        <script src="https://cdn-dev.sstatic.net/Js/moderator.en.js?v=7b461255527d"></script>
+        <script src="https://cdn-dev.sstatic.net/Js/developer.en.js?v=00f365debb89"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn-dev.sstatic.net/Shared/moderator.css?v=5ff187ba9fcb">
+        <script>
+            StackExchange.ready(StackExchange.moderator.init);
+                    StackExchange.ready(StackExchange.developer.init);
+        </script>
+        <link rel="stylesheet" type="text/css" href="https://cdn-dev.sstatic.net/Shared/Channels/channels.css?v=b421c6a4584e">
+<link rel="stylesheet" type="text/css" href="/teams/theme.css?v=10001:1520268710">             
+        
+                    <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                    tex2jax: { inlineMath: [ ["$", "$"], ["\\\\(","\\\\)"] ], displayMath: [ ["$$","$$"], ["\\[", "\\]"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno" },
+                    TeX: { extensions: ["[mhchem]/mhchem.js"],
+                        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                    messageStyle: "none"
+            });
+            </script>
+                <script type="text/x-mathjax-config">
+                    MathJax.Ajax.config.path["mhchem"] = "https://cdnjs.cloudflare.com/ajax/libs/mathjax-mhchem/3.2.0";
+                </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-AMS_HTML-full"></script>
+        <script>
+        StackExchange.debug.init();
+        StackExchange.init({"locale":"en","serverTime":1523220372,"routeName":"Community/Transifex","stackAuthUrl":"https://dev.stackauth.com","networkMetaHostname":"meta.dev.stackexchange.com","isDebugBuild":true,"site":{"name":"Stack Overflow","description":"Q&A for professional and enthusiast programmers","isNoticesTabEnabled":true,"enableNewTagCreationWarning":true,"insertSpaceAfterNameTabCompletion":false,"id":1,"childUrl":"https://meta.dev.stackoverflow.com","protocol":"https"},"user":{"fkey":"425f35b8e5616147f6d1791e439eb2522c4a734f0903ecdddb6b7f21d34613c9","tid":"9161112e-b928-d560-de08-70e9a271a6fb","rep":12616,"isRegistered":true,"isModerator":true,"isDeveloper":true,"isEmployee":true,"userType":4,"userId":920295,"accountId":557741,"gravatar":"<div class=\"gravatar-wrapper-32\"><img src=\"https://www.gravatar.com/avatar/b553a6dbceb13f2b0fb2a7d50614df29?s=32&amp;d=identicon&amp;r=PG\" alt=\"\" width=\"32\" height=\"32\"></div>","profileUrl":"https://dev.stackoverflow.com/users/920295/g3rv4","canSeeDeletedPosts":true,"ab":{"question_show_tweaks":{"v":"altern_unansw_cta","g":2},"simplified_signup_form":{"v":"messaging_b","g":2},"devstory_onboarding_exp":{"v":"opt_out_of_match_emails","g":1},"question_page_hero":{"v":"delay_hero_3","g":2}}},"events":{"postType":{"question":1},"postEditionSection":{"title":1,"body":2,"tags":3}},"story":{"minCompleteBodyLength":75,"likedTagsMaxLength":300,"dislikedTagsMaxLength":300},"jobPreferences":{"maxNumDeveloperRoles":2,"maxNumIndustries":4}}, {"site":{"allowImageUploads":true,"commentHighlightingWithCSS":true,"enableUserHovercards":true,"styleCode":true,"enableImgurHttps":true,"forceHttpsImages":true},"userMessaging":{},"comments":{},"userProfile":{},"tags":{},"accounts":{"currentPasswordRequiredForChangingStackIdPassword":true},"flags":{"allowRetractingFlags":true},"snippets":{"snippetsEnabled":true,"renderDomain":"stacksnippets.net"},"paths":{},"markdown":{"asteriskIntraWordEmphasis":true},"monitoring":{"clientTimingsAbsoluteTimeout":30000,"clientTimingsDebounceTimeout":1000},"slack":{"sidebarAdDismissCookie":"slack-sidebar-ad"}});
+        StackExchange.using.setCacheBreakers({"js/prettify-full.en.js":"21301e7ccfd2","js/moderator.en.js":"7b461255527d","js/full-anon.en.js":"53de363ce0b6","js/full.en.js":"3f47d168b205","js/wmd.en.js":"f89fe270517e","js/third-party/jquery.autocomplete.min.js":"bdb258e949a8","js/third-party/jquery.autocomplete.min.en.js":"bdb258e949a8","js/mobile.en.js":"4eec78697ce3","js/help.en.js":"eea9a2a7907d","js/tageditor.en.js":"91208ed1e402","js/tageditornew.en.js":"ae561a8687d7","js/inline-tag-editing.en.js":"c260399c4b44","js/revisions.en.js":"dcaf265e5ef2","js/review.en.js":"722589973e47","js/tagsuggestions.en.js":"506771585df9","js/post-validation.en.js":"30fabea79780","js/explore-qlist.en.js":"60fbd91942a1","js/events.en.js":"78c3b0e9adcf","js/keyboard-shortcuts.en.js":"b0dc4a6a5455","js/external-editor.en.js":"74785a936a14","js/adops.en.js":"ba4574fe31f3","js/mathjax-editing.en.js":"2955124cda19","js/external-editor.en.js":"74785a936a14","js/snippet-javascript.en.js":"463ac3ab9c89","js/snippet-javascript-codemirror.en.js":"113565729633"});
+        StackExchange.using("gps", function() {
+             StackExchange.gps.init(true);
+        });
+    </script>
+    <noscript id="noscript-css"><style>body,.top-bar{margin-top:1.9em}</style></noscript>
+    </head>
+    <body class=" new-topbar">
+
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+
+
+
+
+<header class="top-bar js-top-bar _fixed _with-left-nav">
+    <div class="-container">
+        <div class="-main">
+                                <a href="https://dev.stackoverflow.com" class="-logo js-gps-track"
+                        data-gps-track="top_nav.click({is_current:false, location:0, destination:8})">
+                        <span class="-img _glyph">Stack Overflow</span>
+                    </a>
+
+
+
+        </div>
+
+            <form id="search" action="/search" method="get" class="searchbar search-channel-context" autocomplete="off" role="search">
+
+
+<div class="grid">
+    <div class="grid--cell f-select">
+        <select id="search-channel-selector" class="search-channel-switcher wmx5">
+            <option data-url="/search">All</option>
+            <option data-url="/search" selected="selected" data-mixed="0">Public</option>
+                    <option data-url="/c/pickles/search">pickles</option>
+        </select>
+    </div>
+    <div class="grid--cell ps-relative fl1">
+        <input name="q" type="text" placeholder="Search…" value="" tabindex="1" autocomplete="off" maxlength="240" class="f-input js-search-field search-channel-switcher-field" />
+        <button type="submit" aria-label="Search..." class="btn-topbar-primary js-search-submit"><svg aria-hidden="true" class="svg-icon iconSearch" width="18" height="18" viewBox="0 0 18 18"><path d="M12.86 11.32L18 16.5 16.5 18l-5.18-5.14v-.35a7 7 0 1 1 1.19-1.19h.35zM7 12A5 5 0 1 0 7 2a5 5 0 0 0 0 10z"/></svg></button>
+    </div>
+</div>
+
+<input name="mixed" value="0" type="hidden" id="search-channel-mixed" />            </form>
+
+        
+
+
+    
+
+<div class="-actions">
+                <nav class="secondary-nav">
+                    <ol class="-list">
+                        <li class="-item">
+        <a href="/admin/dashboard" class="-link js-mod-inbox-button " data-url="/topbar/mod-inbox" data-unread-class="" title="Moderator inbox">
+            <svg aria-hidden="true" class="svg-icon iconModerator" width="18" height="18" viewBox="0 0 18 18"><path d="M8.4.78c.33-.43.87-.43 1.2 0l5.8 7.44c.33.43.33 1.13 0 1.56l-5.8 7.44c-.33.43-.87.43-1.2 0L2.6 9.78a1.34 1.34 0 0 1 0-1.56L8.4.78z"/></svg>
+        </a>
+    </li>
+
+
+                            <li class="-item">
+            <a href="/admin/dashboard" class="-link _text-only" title="188 posts flagged for moderator attention">
+                <span class="indicator-badge _regular">188</span>
+            </a>
+        </li>
+
+                    </ol>
+                </nav>
+            <a href="/users/920295/g3rv4" class="my-profile js-gps-track" data-gps-track="profile_summary.click()">
+            <div class="gravatar-wrapper-24" title="g3rv4"><img src="https://www.gravatar.com/avatar/b553a6dbceb13f2b0fb2a7d50614df29?s=48&amp;d=identicon&amp;r=PG" alt="" width="24" height="24" class="-avatar js-avatar-me"></div>
+                <div class="-rep js-header-rep" title="your reputation: 12,616">12,616</div>
+                    <div class="-badges">
+<span title="4 gold badges"><span class="badge1">&#9679;</span><span class="badgecount">4</span></span><span title="20 silver badges"><span class="badge2">&#9679;</span><span class="badgecount">20</span></span><span title="46 bronze badges"><span class="badge3">&#9679;</span><span class="badgecount">46</span></span>                    </div>
+            </a>
+    <nav class="secondary-nav">
+        <div class="-dialog-container js-topbar-dialog-corral">
+
+
+    <div class="topbar-dialog siteSwitcher-dialog dno">
+        <div class="header">
+            <h3><a href="https://dev.stackoverflow.com">current community</a>
+            </h3>
+        </div>
+        <div class="modal-content current-site-container">
+            <ul class="current-site">
+                    <li>
+                            <div class="related-links">
+            <a href="https://dev.stackoverflow.com/help" class="js-gps-track"     data-gps-track="site_switcher.click({ item_type:14 })"
+>help</a>
+                    <a href="http://dev.bonfire.stackoverflow.com" class="js-gps-track"     data-gps-track="site_switcher.click({ item_type:6 })"
+>chat</a>
+                    <a href="https://dev.stackoverflow.com/users/logout" class="js-gps-track"     data-gps-track="site_switcher.click({ item_type:8 })"
+>log out</a>
+    </div>
+    <a href="https://dev.stackoverflow.com"
+       class="current-site-link site-link js-gps-track"
+       data-id="1"
+       data-gps-track="site_switcher.click({ item_type:3 })">
+        <div class="favicon favicon-stackoverflow site-icon" title="Stack Overflow"></div>
+        Stack Overflow
+    </a>
+
+                    </li>
+                    <li class="related-site">
+                            <div class="L-shaped-icon-container">
+        <span class="L-shaped-icon"></span>
+    </div>
+
+                            <a href="https://meta.dev.stackoverflow.com"
+       class="site-link js-gps-track"
+       data-id="552"
+       data-gps-track="site.switch({ target_site:552, item_type:3 }),site_switcher.click({ item_type:4 })">
+        <div class="favicon favicon-stackoverflowmeta site-icon" title="Meta Stack Overflow"></div>
+        Meta Stack Overflow
+    </a>
+
+                    </li>
+            </ul>
+        </div>
+
+        <div class="header" id="your-communities-header">
+            <h3>
+                    <a href="https://dev.stackexchange.com/users/557741/?tab=accounts">your communities</a>
+            </h3>
+
+                <a href="#" id="edit-pinned-sites">edit</a>
+                <a href="#" id="cancel-pinned-sites" style="display: none;">cancel</a>
+        </div>
+        <div class="modal-content" id="your-communities-section">
+
+                <ul class="my-sites">
+                        <li>
+                                <a href="https://meta.dev.stackoverflow.com"
+       class="site-link js-gps-track"
+       data-id="552"
+       data-gps-track="site.switch({ target_site:552, item_type:3 }),site_switcher.click({ item_type:1 })">
+        <div class="favicon favicon-stackoverflowmeta site-icon" title="Meta Stack Overflow"></div>
+        Meta Stack Overflow
+            <span class="rep-score">12,616</span>
+    </a>
+
+                        </li>
+                        <li>
+                                <a href="https://meta.dev.stackexchange.com"
+       class="site-link js-gps-track"
+       data-id="4"
+       data-gps-track="site.switch({ target_site:4, item_type:3 }),site_switcher.click({ item_type:1 })">
+        <div class="favicon favicon-stackexchangemeta site-icon" title="Meta Stack Exchange"></div>
+        Meta Stack Exchange
+            <span class="rep-score">158</span>
+    </a>
+
+                        </li>
+                        <li>
+                                <a href="https://dev.stackoverflow.com"
+       class="site-link js-gps-track"
+       data-id="1"
+       data-gps-track="site.switch({ target_site:1, item_type:3 }),site_switcher.click({ item_type:1 })">
+        <div class="favicon favicon-stackoverflow site-icon" title="Stack Overflow"></div>
+        Stack Overflow
+            <span class="rep-score">12,616</span>
+    </a>
+
+                        </li>
+                        <li>
+                                <a href="https://workplace.stackexchange.com"
+       class="site-link js-gps-track"
+       data-id="423"
+       data-gps-track="site.switch({ target_site:423, item_type:3 }),site_switcher.click({ item_type:1 })">
+        <div class="favicon favicon-workplace site-icon" title="The Workplace"></div>
+        The Workplace
+            <span class="rep-score">447</span>
+    </a>
+
+                        </li>
+                        <li>
+                                <a href="https://travel.stackexchange.com"
+       class="site-link js-gps-track"
+       data-id="273"
+       data-gps-track="site.switch({ target_site:273, item_type:3 }),site_switcher.click({ item_type:1 })">
+        <div class="favicon favicon-travel site-icon" title="Travel"></div>
+        Travel
+            <span class="rep-score">204</span>
+    </a>
+
+                        </li>
+                        <li>
+                                <a href="https://security.stackexchange.com"
+       class="site-link js-gps-track"
+       data-id="162"
+       data-gps-track="site.switch({ target_site:162, item_type:3 }),site_switcher.click({ item_type:1 })">
+        <div class="favicon favicon-security site-icon" title="Information Security"></div>
+        Information Security
+            <span class="rep-score">115</span>
+    </a>
+
+                        </li>
+                </ul>
+                    <div class="pinned-site-editor-container" style="display: none;">
+                        <input id="js-site-search-txt"
+                                type="text"
+                                class="site-filter-input"
+                                value=""
+                                placeholder="Add a Stack Exchange community"/>
+                        <input type="submit" id="pin-site-btn" value="Add" disabled="disabled"/>
+                        <ul class="js-found-sites found-sites"></ul>
+                        <ul class="pinned-site-list sortable" data-custom-list="True">
+                        </ul>
+                        <input type="submit" value="Save" id="save-pinned-sites-btn" disabled="disabled"/>
+                        <a href="#" id="reset-pinned-sites">reset to default list</a>
+                    </div>
+        </div>
+
+        <div class="header">
+            <h3><a href="https://dev.stackexchange.com/sites">more stack exchange communities</a>
+            </h3>
+            <a href="https://stackoverflow.blog" class="fr">company blog</a>
+        </div>
+        <div class="modal-content">
+                <div class="child-content"></div>
+        </div>        
+    </div>
+                <div class="topbar-dialog help-dialog js-help-dialog dno">
+        <div class="modal-content">
+            <ul>
+                                    <li>
+                        <a href="/tour" class="js-gps-track" data-gps-track="help_popup.click({ item_type:1 })">
+                            Tour
+                            <span class="item-summary">
+                                Start here for a quick overview of the site
+                            </span>
+                        </a>
+                    </li>
+                <li>
+                    <a href="/help" class="js-gps-track" data-gps-track="help_popup.click({ item_type:4 })">
+                        Help Center
+                        <span class="item-summary">
+                            Detailed answers to any questions you might have
+                        </span>
+                    </a>
+                </li>
+                        <li>
+                            <a href="https://meta.dev.stackoverflow.com" class="js-gps-track" data-gps-track="help_popup.click({ item_type:2 })">
+                                Meta
+                                <span class="item-summary">
+                                    Discuss the workings and policies of this site
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://dev.stackoverflow.com/company/about" class="js-gps-track" data-gps-track="help_popup.click({ item_type:6 })">
+                                About Us
+                                <span class="item-summary">
+                                    Learn more about Stack Overflow the company
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.stackoverflowbusiness.com/?ref=topbar_help" class="js-gps-track" data-gps-track="help_popup.click({ item_type:7 })">
+                                Business
+                                <span class="item-summary">
+                                    Learn more about hiring developers or posting ads with us
+                                </span>
+                            </a>
+                        </li>
+            </ul>
+        </div>
+    </div>
+        </div>
+        <ol class="-list">
+    <li class="-item">
+        <a href="https://dev.stackexchange.com/users/557741?tab=inbox" class="-link js-inbox-button" title="Recent inbox messages">
+            <svg aria-hidden="true" class="svg-icon iconInbox" width="20" height="18" viewBox="0 0 20 18"><path d="M15.19 1H4.63c-.85 0-1.6.54-1.85 1.35L0 10.79V15c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2v-4.21l-2.87-8.44A2 2 0 0 0 15.19 1zm-.28 10l-2 2h-6l-2-2H1.96L4.4 3.68A1 1 0 0 1 5.35 3h9.12a1 1 0 0 1 .95.68L17.86 11h-2.95z"/></svg>
+            <span class="indicator-badge js-unread-count _important" style="display: none;"></span>
+        </a>
+    </li>
+    <li class="-item">
+        <a href="https://dev.stackexchange.com/users/557741?tab=reputation" class="-link js-achievements-button" title="Recent achievements: reputation, badges, and privileges earned" data-unread-class="_highlighted-positive">
+            <svg aria-hidden="true" class="svg-icon iconAchievements" width="18" height="18" viewBox="0 0 18 18"><path d="M15 2V1H3v1H0v4c0 1.6 1.4 3 3 3v1c.4 1.5 3 2.6 5 3v2H5s-1 1.5-1 2h10c0-.4-1-2-1-2h-3v-2c2-.4 4.6-1.5 5-3V9c1.6-.2 3-1.4 3-3V2h-3zM3 7c-.5 0-1-.5-1-1V4h1v3zm8.4 2.5L9 8 6.6 9.4l1-2.7L5 5h3l1-2.7L10 5h2.8l-2.3 1.8 1 2.7h-.1zM16 6c0 .5-.5 1-1 1V4h1v2z"/></svg>
+            <span class="indicator-badge js-unread-count _positive" style="display: none;"></span>
+        </a>
+    </li>
+
+    <li class="-item">
+        <a href="/review" class="-link js-gps-track js-review-button _danger-indicator" title="Review queues - help improve the site" data-gps-track="review_popup.click({ in_danger: true })">
+            <svg aria-hidden="true" class="svg-icon iconReviewQueue" width="18" height="18" viewBox="0 0 18 18"><path d="M16 7.5l-5 4.97-1.79-1.77a1 1 0 0 0-1.4 0l-2.1 2.1a1 1 0 0 0 0 1.4L8.5 17H2a2 2 0 0 1-2-2V3c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v4.5zM12 7H2v2h10V7zm2-4H2v2h12V3zM2 11v2h3v-2H2zm16-.5l-7 7-4-4L8.5 12l2.5 2.5L16.5 9l1.5 1.5z"/></svg>
+        </a>
+        
+    </li>
+    <li class="-item"><a href="#" class="-link js-help-button" title="Help Center and other resources">
+        <svg aria-hidden="true" class="svg-icon iconHelp" width="18" height="18" viewBox="0 0 18 18"><path d="M9 1a8 8 0 1 0 0 16A8 8 0 0 0 9 1zm.81 12.13c-.02.71-.55 1.15-1.24 1.13-.66-.02-1.17-.49-1.15-1.2.02-.72.56-1.18 1.22-1.16.7.03 1.2.51 1.17 1.23zM11.77 8a5.8 5.8 0 0 1-1.02.91l-.53.37c-.26.2-.42.43-.5.69a4 4 0 0 0-.09.75c0 .05-.03.16-.18.16H7.88c-.16 0-.18-.1-.18-.15.03-.66.12-1.21.4-1.66a5.29 5.29 0 0 1 1.43-1.22c.16-.12.28-.25.38-.39a1.34 1.34 0 0 0 .02-1.71c-.24-.31-.51-.46-1.03-.46-.51 0-.8.26-1.02.6-.21.33-.18.73-.18 1.1H5.75c0-1.38.35-2.25 1.1-2.76.52-.35 1.17-.5 1.93-.5 1 0 1.79.18 2.49.71.64.5.98 1.18.98 2.12 0 .57-.2 1.05-.48 1.44z"/></svg>
+    </a></li>
+
+    <li class="-item">
+        <a href="https://dev.stackexchange.com" class="-link js-site-switcher-button js-gps-track" data-gps-track="site_switcher.show" title="A list of all 1 Stack Exchange site">
+            <svg aria-hidden="true" class="svg-icon iconStackExchange" width="18" height="18" viewBox="0 0 18 18"><path d="M1 13c0 1.1.9 2 2 2h8v3l3-3h1a2 2 0 0 0 2-2v-2H1v2zM15 1H3a2 2 0 0 0-2 2v2h16V3a2 2 0 0 0-2-2zM1 6h16v4H1V6z"/></svg>
+        </a>
+    </li>
+        </ol>
+    </nav>
+</div>
+
+    </div>
+</header>
+
+    <script>
+        StackExchange.ready(function() { StackExchange.topbar.init(); });
+        StackExchange.scrollPadding.setPaddingTop(60, 10);     </script>
+
+
+<div id="announcement-banner" data-campaign="2018-03-13.dev-survey-2018" data-cookie="notice-dsr" data-expire-date="1524211200000">
+    <div class="-container">
+        <span class="-body">The results are in!</span>
+        <a class="-link js-link js-gps-track" href="https://insights.stackoverflow.com/survey/2018/" data-ga="[&quot;dev-survey-2018&quot;,&quot;Announcement Banner&quot;,&quot;https://insights.stackoverflow.com/survey/2018/&quot;,null,{&quot;dimension4&quot;:&quot;dev-survey-2018&quot;}]"
+           data-gps-track="announcement_banner.click({campaign: '2018-03-13.dev-survey-2018', location: 0, action: 2})">See the 2018 Developer Survey results. &raquo;</a>
+        <a class="-dismiss js-dismiss js-gps-track" href="#" title="dismiss"
+           data-gps-track="announcement_banner.click({campaign: '2018-03-13.dev-survey-2018', location: 0, action: 1})"><svg aria-hidden="true" class="svg-icon iconClear" width="18" height="18" viewBox="0 0 18 18"><path d="M15 4.41L13.59 3 9 7.59 4.41 3 3 4.41 7.59 9 3 13.59 4.41 15 9 10.41 13.59 15 15 13.59 10.41 9z"/></svg></a>
+    </div>
+</div>
+<script>
+    StackExchange.ready(function () {
+        var $banner = $('#announcement-banner');
+
+        function setCookie(value) {
+            $.cookie($banner.data('cookie'), value, {
+                expires: (new Date($banner.data('expire-date'))),
+                path: '/'
+            });
+        }
+
+        $banner.find('.js-link').click(function () {
+            setCookie('2;' + Date.now());
+        });
+
+        $banner.find('.js-dismiss').click(function () {
+            setCookie('4;' + Date.now());
+            $banner.animate({ height: '0', opacity: 0 }, 'fast', 'linear', function () { $banner.remove(); });
+            return false;
+        });
+    });
+</script>
+
+    <div class="container">
+        
+
+
+
+
+
+
+
+<div class="left-sidebar">
+    <nav role="navigation">
+        <ol class="nav-links">
+            <li>    <li class="-item">
+        <a href="/"
+            class="pl8 js-gps-track -link"
+            data-gps-track="top_nav.click({is_current:false, location:0, destination:8})">
+Home        </a>
+    </li>
+</li>
+            <li>
+                <ol class="nav-links">
+                    <li class="fs-fine tt-uppercase ml8 mt16 mb4 fc-light">Public</li>
+                        <li class="-item">
+        <a href="/questions"
+            class="pl8 js-gps-track -link -link__with-icon"
+            data-gps-track="top_nav.click({is_current:false, location:0, destination:1})">
+<svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18"><path d="M9 1a8 8 0 1 0 0 16A8 8 0 0 0 9 1zM8 15.32a6.4 6.4 0 0 1-5.23-7.75L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.4 6.4 0 0 1 2.32 10.24z"/></svg>                <span class="-link--channel-name">Stack Overflow</span>
+        </a>
+    </li>
+
+                        <li class="-item">
+        <a href="/tags"
+            class=" js-gps-track -link"
+            data-gps-track="top_nav.click({is_current:false, location:0, destination:2})">
+Tags        </a>
+    </li>
+
+                        <li class="-item">
+        <a href="/users"
+            class=" js-gps-track -link"
+            data-gps-track="top_nav.click({is_current:false, location:0, destination:3})">
+Users        </a>
+    </li>
+
+    <li class="-item">
+        <a href="/jobs?med=site-ui&amp;ref=jobs-tab"
+            class=" js-gps-track -link"
+            data-gps-track="top_nav.click({is_current:false, location:0, destination:6})">
+Jobs        </a>
+    </li>
+                </ol>
+            </li>
+            <li>
+                <ol class="nav-links">
+                    <li class="fs-fine tt-uppercase ml8 mt24 mb4 fc-light">Teams</li>
+    <li class="-item">
+        <a href="/c/pickles/questions"
+            class="pl8 js-gps-track -link"
+            data-gps-track="top_nav.click({is_current:false, location:0, destination:1});teams.sidebar_team_homepage.click({team_id:10001, new_activity:false})">
+                <div class="grid ai-center">
+                    <div class="grid--cell">
+                        <div class="channel10001 s-avatar s-avatar__sm themed-avatar__sm va-text-bottom"><div class="s-avatar--letter">p</div><svg aria-hidden="true" class="svg-icon native s-avatar--badge iconShieldXSm" width="9" height="10" viewBox="0 0 9 10"><g><path d="M0 1.84L4.5 0 9 1.84v3.17C9 7.53 6.3 10 4.5 10 2.7 10 0 7.53 0 5.01V1.84z" fill="#FFF"/><path d="M4.5 1L1 2.5v2.51C1 7.34 3.65 9 4.5 9 5.34 9 8 7.34 8 5.01V2.5L4.5 1z" fill="#6A7E7C"/><path d="M3.2 7l.78-1.48a.39.39 0 0 0-.15-.38C3.5 4.9 3.1 4.44 3.1 4c0-.71.47-1.23 1.39-1.23.91 0 1.4.52 1.4 1.23 0 .44-.38.9-.72 1.14a.4.4 0 0 0-.15.38L5.8 7H3.2z" fill="#FFF"/></g></svg></div>
+                    </div>
+                    <div class="grid--cell pl4 truncate">
+                        <span class="pl2">pickles</span>
+                    </div>
+                </div>
+        </a>
+    </li>
+                </ol>
+            </li>
+        </ol>
+    </nav>
+</div>
+        <div id="content" class="snippet-hidden">
+
+
+            
+<div id="mainbar-full">
+    <div class="subheader">
+        <h1>
+                <a href="/developer">Developer</a> &gt; <a href="/developer/translation">Translation</a> &gt; Transifex
+        </h1>
+    </div>
+    <form class="transifex" action="/error" method="POST">
+        <input type="hidden" name="fkey" value="425f35b8e5616147f6d1791e439eb2522c4a734f0903ecdddb6b7f21d34613c9">
+        <input type="button" data-action="/cm/translation/transifex/push" value="english -&gt; transifex"/>
+        <hr/>
+        <select name="locale">
+                <option value="es">Spanish</option>
+                <option value="ru">Russian</option>
+                <option value="pt-BR">Portuguese (Brazil)</option>
+                <option value="ja">Japanese</option>
+        </select>
+        <input type="button" data-action="/cm/translation/transifex/diff" value="translations &lt;- transifex"/>
+        <br />
+        <input type="button"
+               data-action="/cm/translation/transifex/merge-tags"
+               value="merge tags" />
+        <a href="/cm/site-settings?filter=MoonSpeak.TransifexTagSyncWhitelist">matching</a>
+        <input type="text" readonly="readonly" disabled="disabled" value="^$" />
+            <br />
+            <input type="button"
+                   data-action="/cm/translation/transifex/seed"
+                   data-confirm="This will upload all strings form our DB to transifex as reviewed translations, overwriting everything. Proceed?"
+                   value="seed transifex"/>
+    </form>
+    <div id="messages">
+        <table style="width: 100%">
+        </table>
+    </div>
+</div>
+
+        </div>
+    </div>
+
+    <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+
+                    <a href="https://dev.stackoverflow.com"><svg aria-hidden="true" class="svg-icon native iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><g><path fill="#BCBBBB" d="M26 33v-9h4v13H0V24h4v9z"/><path d="M23.1 25.99l.68-2.95-16.1-3.35L7 23l16.1 2.99zM9.1 15.2l15 7 1.4-3-15-7-1.4 3zm4.2-7.4L26 18.4l2.1-2.5L15.4 5.3l-2.1 2.5zM21.5 0l-2.7 2 9.9 13.3 2.7-2L21.5 0zM7 30h16v-3H7v3z" fill="#F48024"/></g></svg></a>
+                </div>
+            
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="https://dev.stackoverflow.com" class="js-gps-track" data-gps-track="footer.click({ location: 0, link: 15})">Stack Overflow</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="/questions" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 16})">Questions</a></li>
+                                <li class="-item"><a href="https://dev.stackoverflow.com/jobs" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 17})">Jobs</a></li>
+                                <li class="-item"><a href="https://dev.stackoverflow.com/jobs/directory/developer-jobs" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 11})">Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="https://dev.stackoverflow.com/jobs/salary" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 28})">Salary Calculator</a></li>
+                                                            <li class="-item"><a href="/help" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 3 })">Help</a></li>
+                                <li class="-item"><a onclick='StackExchange.switchMobile("on")' class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 12 })">Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="https://www.stackoverflowbusiness.com/?utm_source=so-footer&utm_medium=referral&utm_campaign=brand-activation&utm_term=sotob2b-footer-business-category" class="js-gps-track" data-gps-track="footer.click({ location: 0, link: 19 })">Stack Overflow<br /> Business</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="https://www.stackoverflowbusiness.com/talent?utm_source=so-footer&utm_medium=referral&utm_campaign=brand-activation&utm_term=sotob2b-footer-talent" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 20 })">Talent</a></li>
+                            <li class="-item"><a href="https://www.stackoverflowbusiness.com/advertise?utm_source=so-footer&utm_medium=referral&utm_campaign=brand-activation&utm_term=sotob2b-footer-advertise" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 21 })">Ads</a></li>
+                            <li class="-item"><a href="https://www.stackoverflowbusiness.com/enterprise?utm_source=so-footer&utm_medium=referral&utm_campaign=brand-activation&utm_term=sotob2b-footer-enterprise" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 22 })">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a class="js-gps-track" data-gps-track="footer.click({ location: 0, link: 1 })" href="https://dev.stackoverflow.com/company/about">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 1 })" href="https://dev.stackoverflow.com/company/about">About</a></li>
+                                                <li class="-item"><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 27 })" href="https://dev.stackoverflow.com/company/press">Press</a></li>
+                            <li class="-item"><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 9 })" href="https://dev.stackoverflow.com/company/work-here">Work Here</a></li>
+                        <li class="-item"><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 7 })" href="https://dev.stackexchange.com/legal">Legal</a></li>
+                        <li class="-item"><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 8 })" href="https://dev.stackexchange.com/legal/privacy-policy">Privacy Policy</a></li>
+                            <li class="-item"><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 13 })" href="https://dev.stackoverflow.com/company/contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="site-footer--col site-footer--categories-nav site-footer--col__visible">
+                    <a href="#" class="site-footer--back js-footer-back"><svg aria-hidden="true" class="svg-icon iconArrowLeftAlt" width="18" height="18" viewBox="0 0 18 18"><path d="M10.58 16L12 14.59 6.4 9 12 3.41 10.57 2l-7 7z"/></svg></a>
+                    <div>
+                        <h5 class="-title"><a href="https://stackexchange.com">Stack Exchange<br> Network</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="#" class="-link _expandable js-footer-category-trigger js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })" data-target="Technology">Technology</a></li>
+                            <li class="-item"><a href="#" class="-link _expandable js-footer-category-trigger js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })" data-target="Life / Arts">Life / Arts</a></li>
+                            <li class="-item"><a href="#" class="-link _expandable js-footer-category-trigger js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })" data-target="Culture / Recreation">Culture / Recreation</a></li>
+                            <li class="-item"><a href="#" class="-link _expandable js-footer-category-trigger js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })" data-target="Science">Science</a></li>
+                            <li class="-item"><a href="#" class="-link _expandable js-footer-category-trigger js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })" data-target="Other">Other</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="site-footer--categories">
+                    <div class="site-footer--col site-footer--category js-footer-col" data-name="Technology">
+        <ul class="-list">
+                <li class="-item"><a href="https://stackoverflow.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Stack Overflow</a></li>
+                <li class="-item"><a href="https://serverfault.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Server Fault</a></li>
+                <li class="-item"><a href="https://superuser.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Super User</a></li>
+                <li class="-item"><a href="https://ubuntu.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Ask Ubuntu</a></li>
+                <li class="-item"><a href="https://apple.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Ask Different</a></li>
+                <li class="-item"><a href="https://android.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Android Enthusiasts</a></li>
+                <li class="-item"><a href="https://webapps.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Web Applications</a></li>
+                    </ul></div><div class="site-footer--col site-footer--category js-footer-col" data-name="Technology"><ul class="-list">
+                <li class="-item"><a href="https://unix.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Unix &amp; Linux</a></li>
+                <li class="-item"><a href="https://tex.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">TeX - LaTeX</a></li>
+                <li class="-item"><a href="https://softwareengineering.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Software Engineering</a></li>
+                <li class="-item"><a href="https://sharepoint.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">SharePoint</a></li>
+                <li class="-item"><a href="https://dba.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Database Administrators</a></li>
+                <li class="-item"><a href="https://wordpress.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">WordPress Answers</a></li>
+                <li class="-item"><a href="https://electronics.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Electrical Engineering</a></li>
+                    </ul></div><div class="site-footer--col site-footer--category js-footer-col" data-name="Technology"><ul class="-list">
+                <li class="-item"><a href="https://drupal.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Drupal Answers</a></li>
+                <li class="-item"><a href="https://gis.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Geographic Information Systems</a></li>
+                <li class="-item"><a href="https://gamedev.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Game Development</a></li>
+                <li class="-item"><a href="https://security.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">IT Security</a></li>
+                <li class="-item"><a href="https://webmasters.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Webmasters</a></li>
+                <li class="-item"><a href="https://ux.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">User Experience</a></li>
+                <li class="-item"><a href="https://mathematica.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Mathematica</a></li>
+                            <li class="-item">
+                    <a href="https://dev.stackexchange.com/sites#technology" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 26 })">
+                        <strong>
+                            more (20)
+                        </strong>
+                    </a>
+                </li>
+        </ul>
+    </div>
+    <div class="site-footer--col site-footer--category js-footer-col" data-name="Life / Arts">
+        <ul class="-list">
+                <li class="-item"><a href="https://cooking.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Seasoned Advice</a></li>
+                <li class="-item"><a href="https://diy.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Home Improvement</a></li>
+                <li class="-item"><a href="https://scifi.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Science Fiction &amp; Fantasy</a></li>
+                <li class="-item"><a href="https://photo.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Photography</a></li>
+                            <li class="-item">
+                    <a href="https://dev.stackexchange.com/sites#lifearts" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 26 })">
+                        <strong>
+                            more (4)
+                        </strong>
+                    </a>
+                </li>
+        </ul>
+    </div>
+    <div class="site-footer--col site-footer--category js-footer-col" data-name="Culture / Recreation">
+        <ul class="-list">
+                <li class="-item"><a href="https://english.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">English Language &amp; Usage</a></li>
+                <li class="-item"><a href="https://skeptics.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Skeptics</a></li>
+                <li class="-item"><a href="https://travel.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Travel</a></li>
+                <li class="-item"><a href="https://judaism.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Mi Yodea</a></li>
+                <li class="-item"><a href="https://christianity.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Christianity</a></li>
+                <li class="-item"><a href="https://gaming.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Arqade</a></li>
+                <li class="-item"><a href="https://bicycles.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Bicycles</a></li>
+                    </ul></div><div class="site-footer--col site-footer--category js-footer-col" data-name="Culture / Recreation"><ul class="-list">
+                <li class="-item"><a href="https://rpg.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Role-playing Games</a></li>
+                            <li class="-item">
+                    <a href="https://dev.stackexchange.com/sites#culturerecreation" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 26 })">
+                        <strong>
+                            more (6)
+                        </strong>
+                    </a>
+                </li>
+        </ul>
+    </div>
+    <div class="site-footer--col site-footer--category js-footer-col" data-name="Science">
+        <ul class="-list">
+                <li class="-item"><a href="https://math.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Mathematics</a></li>
+                <li class="-item"><a href="https://stats.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Cross Validated</a></li>
+                <li class="-item"><a href="https://physics.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Physics</a></li>
+                <li class="-item"><a href="https://cstheory.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Theoretical Computer Science</a></li>
+                            <li class="-item">
+                    <a href="https://dev.stackexchange.com/sites#science" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 26 })">
+                        <strong>
+                            more (5)
+                        </strong>
+                    </a>
+                </li>
+        </ul>
+    </div>
+    <div class="site-footer--col site-footer--category js-footer-col" data-name="Other">
+        <ul class="-list">
+                <li class="-item"><a href="https://meta.dev.stackexchange.com/" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Meta Stack Exchange</a></li>
+                <li class="-item"><a href="https://area51.stackexchange.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Area 51</a></li>
+                <li class="-item"><a href="https://talent.stackexchange.com?utm_source=dev.stackoverflow.com&amp;amp;utm_medium=site-ui&amp;amp;utm_campaign=footerlink" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Stack Overflow Talent</a></li>
+                <li class="-item"><a href="https://stackapps.com" class="-link js-gps-track" data-gps-track="footer.click({ location: 1, link: 25 })" title="Something">Stack Apps</a></li>
+                    </ul>
+    </div>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link:4 })" href="https://stackoverflow.blog?blb=1">Blog</a></li>
+                    <li class="-item"><a href="https://www.facebook.com/officialstackoverflow/" class="-link">Facebook</a></li>
+                    <li class="-item"><a href="https://twitter.com/stackoverflow" class="-link">Twitter</a></li>
+                    <li class="-item"><a href="https://linkedin.com/company/stack-overflow" class="-link">LinkedIn</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+Site Design / Logo &#169; 2018 Stack Exchange Inc; 
+                            Publicly available user contributions licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="license">cc by-sa 3.0</a> with <a href="https://stackoverflow.blog/2009/06/25/attribution-required/" rel="license">attribution required</a>. 
+                            Stack Overflow for Teams user contributions licensed under Teams user terms.
+                    <span id="svnrev" title="28008">rev&nbsp;2018.4.7.29778</span>
+                </p>
+            </div>
+        </div>
+
+                    <div class="site-footer--extra">
+                    <div class="grid--cell mr4">    <select class="language" tabindex="-1">
+        <option value="9" selected="selected">English</option>
+        <option value="1104">MoonSpeak</option>
+        <option value="1046">Portuguese</option>
+        <option value="17">Japanese</option>
+        <option value="10">Spanish</option>
+        <option value="25">Russian</option>
+        <option value="Site Default">Site Default</option>
+    </select>
+    <script>
+        StackExchange.ready(function() {
+            var ddl = $("#footer select.language, .js-footer select.language");
+            ddl.change(function () {
+                var lcid = ddl.val();
+                var url = '/cm/translation/transifex';
+                $.post(
+                    '/locale/' + lcid,
+                    { returnurl: url, fkey: StackExchange.options.user.fkey },
+                    function (data, status, xhr) {
+                        window.location = data;
+                    }
+                );
+            });
+        });
+    </script>
+</div>
+                    <div class="grid--cell mr4">
+<select class='skin' tabindex='-1'>
+<option value='_local'>Local .less</option>
+<option value='_local_change'>Change local .less</option>
+<option value='_local_clear'>Clear local .less</option>
+<option value='_cdn_local'>Local CDN</option>
+<option value='_cdn_change'>Change local CDN</option>
+<option value='_cdn_clear'>Clear local CDN</option>
+<option value='3dprinting'>3dprinting</option>
+
+<option value='3dprintingmeta'>3dprintingmeta</option>
+
+<option value='academia'>academia</option>
+
+<option value='academiameta'>academiameta</option>
+
+<option value='ai'>ai</option>
+
+<option value='aimeta'>aimeta</option>
+
+<option value='alcohol'>alcohol</option>
+
+<option value='alcoholmeta'>alcoholmeta</option>
+
+<option value='android'>android</option>
+
+<option value='androidmeta'>androidmeta</option>
+
+<option value='anime'>anime</option>
+
+<option value='animemeta'>animemeta</option>
+
+<option value='apple'>apple</option>
+
+<option value='applemeta'>applemeta</option>
+
+<option value='arabic'>arabic</option>
+
+<option value='arabicmeta'>arabicmeta</option>
+
+<option value='arduino'>arduino</option>
+
+<option value='arduinometa'>arduinometa</option>
+
+<option value='area51'>area51</option>
+
+<option value='area51discuss'>area51discuss</option>
+
+<option value='askubuntu'>askubuntu</option>
+
+<option value='askubuntumeta'>askubuntumeta</option>
+
+<option value='astronomy'>astronomy</option>
+
+<option value='astronomymeta'>astronomymeta</option>
+
+<option value='augur'>augur</option>
+
+<option value='augurmeta'>augurmeta</option>
+
+<option value='aviation'>aviation</option>
+
+<option value='aviationmeta'>aviationmeta</option>
+
+<option value='avp'>avp</option>
+
+<option value='avpmeta'>avpmeta</option>
+
+<option value='beta'>beta</option>
+
+<option value='betameta'>betameta</option>
+
+<option value='bicycles'>bicycles</option>
+
+<option value='bicyclesmeta'>bicyclesmeta</option>
+
+<option value='bioinformatics'>bioinformatics</option>
+
+<option value='bioinformaticsmeta'>bioinformaticsmeta</option>
+
+<option value='biology'>biology</option>
+
+<option value='biologymeta'>biologymeta</option>
+
+<option value='bitcoin'>bitcoin</option>
+
+<option value='bitcoinmeta'>bitcoinmeta</option>
+
+<option value='blender'>blender</option>
+
+<option value='blendermeta'>blendermeta</option>
+
+<option value='boardgames'>boardgames</option>
+
+<option value='boardgamesmeta'>boardgamesmeta</option>
+
+<option value='br'>br</option>
+
+<option value='bricks'>bricks</option>
+
+<option value='bricksmeta'>bricksmeta</option>
+
+<option value='brmeta'>brmeta</option>
+
+<option value='buddhism'>buddhism</option>
+
+<option value='buddhismmeta'>buddhismmeta</option>
+
+<option value='careers'>careers</option>
+
+<option value='channels'>channels</option>
+
+<option value='chemistry'>chemistry</option>
+
+<option value='chemistrymeta'>chemistrymeta</option>
+
+<option value='chess'>chess</option>
+
+<option value='chessmeta'>chessmeta</option>
+
+<option value='chinese'>chinese</option>
+
+<option value='chinesemeta'>chinesemeta</option>
+
+<option value='christianity'>christianity</option>
+
+<option value='christianitymeta'>christianitymeta</option>
+
+<option value='civicrm'>civicrm</option>
+
+<option value='civicrmmeta'>civicrmmeta</option>
+
+<option value='codegolf'>codegolf</option>
+
+<option value='codegolfmeta'>codegolfmeta</option>
+
+<option value='codereview'>codereview</option>
+
+<option value='codereviewmeta'>codereviewmeta</option>
+
+<option value='coffee'>coffee</option>
+
+<option value='coffeemeta'>coffeemeta</option>
+
+<option value='communitybuilding'>communitybuilding</option>
+
+<option value='communitybuildingmeta'>communitybuildingmeta</option>
+
+<option value='computergraphics'>computergraphics</option>
+
+<option value='computergraphicsmeta'>computergraphicsmeta</option>
+
+<option value='conlang'>conlang</option>
+
+<option value='conlangmeta'>conlangmeta</option>
+
+<option value='cooking'>cooking</option>
+
+<option value='cookingmeta'>cookingmeta</option>
+
+<option value='craftcms'>craftcms</option>
+
+<option value='craftcmsmeta'>craftcmsmeta</option>
+
+<option value='crafts'>crafts</option>
+
+<option value='craftsmeta'>craftsmeta</option>
+
+<option value='crypto'>crypto</option>
+
+<option value='cryptometa'>cryptometa</option>
+
+<option value='cs'>cs</option>
+
+<option value='cs50'>cs50</option>
+
+<option value='cs50meta'>cs50meta</option>
+
+<option value='cseducators'>cseducators</option>
+
+<option value='cseducatorsmeta'>cseducatorsmeta</option>
+
+<option value='csmeta'>csmeta</option>
+
+<option value='cstheory'>cstheory</option>
+
+<option value='cstheorymeta'>cstheorymeta</option>
+
+<option value='datascience'>datascience</option>
+
+<option value='datasciencemeta'>datasciencemeta</option>
+
+<option value='dba'>dba</option>
+
+<option value='dbameta'>dbameta</option>
+
+<option value='deepweb'>deepweb</option>
+
+<option value='deepwebmeta'>deepwebmeta</option>
+
+<option value='devops'>devops</option>
+
+<option value='devopsmeta'>devopsmeta</option>
+
+<option value='diy'>diy</option>
+
+<option value='diymeta'>diymeta</option>
+
+<option value='drupal'>drupal</option>
+
+<option value='drupalmeta'>drupalmeta</option>
+
+<option value='dsp'>dsp</option>
+
+<option value='dspmeta'>dspmeta</option>
+
+<option value='earthscience'>earthscience</option>
+
+<option value='earthsciencemeta'>earthsciencemeta</option>
+
+<option value='ebooks'>ebooks</option>
+
+<option value='ebooksmeta'>ebooksmeta</option>
+
+<option value='economics'>economics</option>
+
+<option value='economicsmeta'>economicsmeta</option>
+
+<option value='edx-cs169-1x'>edx-cs169-1x</option>
+
+<option value='edx-cs169-1xmeta'>edx-cs169-1xmeta</option>
+
+<option value='electronics'>electronics</option>
+
+<option value='electronicsmeta'>electronicsmeta</option>
+
+<option value='elementaryos'>elementaryos</option>
+
+<option value='elementaryosmeta'>elementaryosmeta</option>
+
+<option value='ell'>ell</option>
+
+<option value='ellmeta'>ellmeta</option>
+
+<option value='emacs'>emacs</option>
+
+<option value='emacsmeta'>emacsmeta</option>
+
+<option value='embedded'>embedded</option>
+
+<option value='embeddedmeta'>embeddedmeta</option>
+
+<option value='engineering'>engineering</option>
+
+<option value='engineeringmeta'>engineeringmeta</option>
+
+<option value='english'>english</option>
+
+<option value='englishmeta'>englishmeta</option>
+
+<option value='es'>es</option>
+
+<option value='esmeta'>esmeta</option>
+
+<option value='esperanto'>esperanto</option>
+
+<option value='esperantometa'>esperantometa</option>
+
+<option value='ethereum'>ethereum</option>
+
+<option value='ethereummeta'>ethereummeta</option>
+
+<option value='expatriates'>expatriates</option>
+
+<option value='expatriatesmeta'>expatriatesmeta</option>
+
+<option value='expressionengine'>expressionengine</option>
+
+<option value='expressionenginemeta'>expressionenginemeta</option>
+
+<option value='fitness'>fitness</option>
+
+<option value='fitnessmeta'>fitnessmeta</option>
+
+<option value='freelancing'>freelancing</option>
+
+<option value='freelancingmeta'>freelancingmeta</option>
+
+<option value='french'>french</option>
+
+<option value='frenchmeta'>frenchmeta</option>
+
+<option value='gamedev'>gamedev</option>
+
+<option value='gamedevmeta'>gamedevmeta</option>
+
+<option value='gamification'>gamification</option>
+
+<option value='gamificationmeta'>gamificationmeta</option>
+
+<option value='gaming'>gaming</option>
+
+<option value='gamingmeta'>gamingmeta</option>
+
+<option value='gardening'>gardening</option>
+
+<option value='gardeningmeta'>gardeningmeta</option>
+
+<option value='genealogy'>genealogy</option>
+
+<option value='genealogymeta'>genealogymeta</option>
+
+<option value='german'>german</option>
+
+<option value='germanmeta'>germanmeta</option>
+
+<option value='gis'>gis</option>
+
+<option value='gismeta'>gismeta</option>
+
+<option value='graphicdesign'>graphicdesign</option>
+
+<option value='graphicdesignmeta'>graphicdesignmeta</option>
+
+<option value='ham'>ham</option>
+
+<option value='hammeta'>hammeta</option>
+
+<option value='hardwarerecs'>hardwarerecs</option>
+
+<option value='hardwarerecsmeta'>hardwarerecsmeta</option>
+
+<option value='health'>health</option>
+
+<option value='healthmeta'>healthmeta</option>
+
+<option value='hermeneutics'>hermeneutics</option>
+
+<option value='hermeneuticsmeta'>hermeneuticsmeta</option>
+
+<option value='hinduism'>hinduism</option>
+
+<option value='hinduismmeta'>hinduismmeta</option>
+
+<option value='history'>history</option>
+
+<option value='historymeta'>historymeta</option>
+
+<option value='homebrew'>homebrew</option>
+
+<option value='homebrewmeta'>homebrewmeta</option>
+
+<option value='hsm'>hsm</option>
+
+<option value='hsmmeta'>hsmmeta</option>
+
+<option value='i2p'>i2p</option>
+
+<option value='i2pmeta'>i2pmeta</option>
+
+<option value='interpersonal'>interpersonal</option>
+
+<option value='interpersonalmeta'>interpersonalmeta</option>
+
+<option value='iot'>iot</option>
+
+<option value='iota'>iota</option>
+
+<option value='iotameta'>iotameta</option>
+
+<option value='iotmeta'>iotmeta</option>
+
+<option value='islam'>islam</option>
+
+<option value='islammeta'>islammeta</option>
+
+<option value='italian'>italian</option>
+
+<option value='italianmeta'>italianmeta</option>
+
+<option value='ja'>ja</option>
+
+<option value='jameta'>jameta</option>
+
+<option value='japanese'>japanese</option>
+
+<option value='japanesemeta'>japanesemeta</option>
+
+<option value='joomla'>joomla</option>
+
+<option value='joomlameta'>joomlameta</option>
+
+<option value='judaism'>judaism</option>
+
+<option value='judaismmeta'>judaismmeta</option>
+
+<option value='korean'>korean</option>
+
+<option value='koreanmeta'>koreanmeta</option>
+
+<option value='languagelearning'>languagelearning</option>
+
+<option value='languagelearningmeta'>languagelearningmeta</option>
+
+<option value='latin'>latin</option>
+
+<option value='latinmeta'>latinmeta</option>
+
+<option value='law'>law</option>
+
+<option value='lawmeta'>lawmeta</option>
+
+<option value='lifehacks'>lifehacks</option>
+
+<option value='lifehacksmeta'>lifehacksmeta</option>
+
+<option value='linguistics'>linguistics</option>
+
+<option value='linguisticsmeta'>linguisticsmeta</option>
+
+<option value='literature'>literature</option>
+
+<option value='literaturemeta'>literaturemeta</option>
+
+<option value='magento'>magento</option>
+
+<option value='magentometa'>magentometa</option>
+
+<option value='martialarts'>martialarts</option>
+
+<option value='martialartsmeta'>martialartsmeta</option>
+
+<option value='math'>math</option>
+
+<option value='matheducators'>matheducators</option>
+
+<option value='matheducatorsmeta'>matheducatorsmeta</option>
+
+<option value='mathematica'>mathematica</option>
+
+<option value='mathematicameta'>mathematicameta</option>
+
+<option value='mathmeta'>mathmeta</option>
+
+<option value='mathoverflow'>mathoverflow</option>
+
+<option value='mathoverflowmeta'>mathoverflowmeta</option>
+
+<option value='mechanics'>mechanics</option>
+
+<option value='mechanicsmeta'>mechanicsmeta</option>
+
+<option value='moderators'>moderators</option>
+
+<option value='moderatorsmeta'>moderatorsmeta</option>
+
+<option value='monero'>monero</option>
+
+<option value='monerometa'>monerometa</option>
+
+<option value='money'>money</option>
+
+<option value='moneymeta'>moneymeta</option>
+
+<option value='movies'>movies</option>
+
+<option value='moviesmeta'>moviesmeta</option>
+
+<option value='music'>music</option>
+
+<option value='musicfans'>musicfans</option>
+
+<option value='musicfansmeta'>musicfansmeta</option>
+
+<option value='musicmeta'>musicmeta</option>
+
+<option value='mythology'>mythology</option>
+
+<option value='mythologymeta'>mythologymeta</option>
+
+<option value='neo'>neo</option>
+
+<option value='neometa'>neometa</option>
+
+<option value='networkengineering'>networkengineering</option>
+
+<option value='networkengineeringmeta'>networkengineeringmeta</option>
+
+<option value='opendata'>opendata</option>
+
+<option value='opendatameta'>opendatameta</option>
+
+<option value='openscience'>openscience</option>
+
+<option value='opensciencemeta'>opensciencemeta</option>
+
+<option value='opensource'>opensource</option>
+
+<option value='opensourcemeta'>opensourcemeta</option>
+
+<option value='outdoors'>outdoors</option>
+
+<option value='outdoorsmeta'>outdoorsmeta</option>
+
+<option value='parenting'>parenting</option>
+
+<option value='parentingmeta'>parentingmeta</option>
+
+<option value='patents'>patents</option>
+
+<option value='patentsmeta'>patentsmeta</option>
+
+<option value='pets'>pets</option>
+
+<option value='petsmeta'>petsmeta</option>
+
+<option value='philosophy'>philosophy</option>
+
+<option value='philosophymeta'>philosophymeta</option>
+
+<option value='photo'>photo</option>
+
+<option value='photometa'>photometa</option>
+
+<option value='physics'>physics</option>
+
+<option value='physicsmeta'>physicsmeta</option>
+
+<option value='pm'>pm</option>
+
+<option value='pmmeta'>pmmeta</option>
+
+<option value='poker'>poker</option>
+
+<option value='pokermeta'>pokermeta</option>
+
+<option value='politics'>politics</option>
+
+<option value='politicsmeta'>politicsmeta</option>
+
+<option value='portuguese'>portuguese</option>
+
+<option value='portuguesemeta'>portuguesemeta</option>
+
+<option value='productivity'>productivity</option>
+
+<option value='productivitymeta'>productivitymeta</option>
+
+<option value='psychology'>psychology</option>
+
+<option value='psychologymeta'>psychologymeta</option>
+
+<option value='puzzling'>puzzling</option>
+
+<option value='puzzlingmeta'>puzzlingmeta</option>
+
+<option value='quant'>quant</option>
+
+<option value='quantmeta'>quantmeta</option>
+
+<option value='quantumcomputing'>quantumcomputing</option>
+
+<option value='quantumcomputingmeta'>quantumcomputingmeta</option>
+
+<option value='raspberrypi'>raspberrypi</option>
+
+<option value='raspberrypimeta'>raspberrypimeta</option>
+
+<option value='retrocomputing'>retrocomputing</option>
+
+<option value='retrocomputingmeta'>retrocomputingmeta</option>
+
+<option value='reverseengineering'>reverseengineering</option>
+
+<option value='reverseengineeringmeta'>reverseengineeringmeta</option>
+
+<option value='robotics'>robotics</option>
+
+<option value='roboticsmeta'>roboticsmeta</option>
+
+<option value='rpg'>rpg</option>
+
+<option value='rpgmeta'>rpgmeta</option>
+
+<option value='ru'>ru</option>
+
+<option value='rumeta'>rumeta</option>
+
+<option value='rus'>rus</option>
+
+<option value='rusmeta'>rusmeta</option>
+
+<option value='russian'>russian</option>
+
+<option value='russianmeta'>russianmeta</option>
+
+<option value='salesforce'>salesforce</option>
+
+<option value='salesforcemeta'>salesforcemeta</option>
+
+<option value='sandbox1'>sandbox1</option>
+
+<option value='sandbox2'>sandbox2</option>
+
+<option value='sandbox3'>sandbox3</option>
+
+<option value='sandbox4'>sandbox4</option>
+
+<option value='sandboxmeta1'>sandboxmeta1</option>
+
+<option value='sandboxmeta2'>sandboxmeta2</option>
+
+<option value='sandboxmeta3'>sandboxmeta3</option>
+
+<option value='sandboxmeta4'>sandboxmeta4</option>
+
+<option value='scicomp'>scicomp</option>
+
+<option value='scicompmeta'>scicompmeta</option>
+
+<option value='scifi'>scifi</option>
+
+<option value='scifimeta'>scifimeta</option>
+
+<option value='security'>security</option>
+
+<option value='securitymeta'>securitymeta</option>
+
+<option value='serverfault'>serverfault</option>
+
+<option value='serverfaultmeta'>serverfaultmeta</option>
+
+<option value='sexuality'>sexuality</option>
+
+<option value='sexualitymeta'>sexualitymeta</option>
+
+<option value='sharepoint'>sharepoint</option>
+
+<option value='sharepointmeta'>sharepointmeta</option>
+
+<option value='sitecore'>sitecore</option>
+
+<option value='sitecoremeta'>sitecoremeta</option>
+
+<option value='skeptics'>skeptics</option>
+
+<option value='skepticsmeta'>skepticsmeta</option>
+
+<option value='softwareengineering'>softwareengineering</option>
+
+<option value='softwareengineeringmeta'>softwareengineeringmeta</option>
+
+<option value='softwarerecs'>softwarerecs</option>
+
+<option value='softwarerecsmeta'>softwarerecsmeta</option>
+
+<option value='sound'>sound</option>
+
+<option value='soundmeta'>soundmeta</option>
+
+<option value='space'>space</option>
+
+<option value='spacemeta'>spacemeta</option>
+
+<option value='spanish'>spanish</option>
+
+<option value='spanishmeta'>spanishmeta</option>
+
+<option value='sports'>sports</option>
+
+<option value='sportsmeta'>sportsmeta</option>
+
+<option value='sqa'>sqa</option>
+
+<option value='sqameta'>sqameta</option>
+
+<option value='stackapps'>stackapps</option>
+
+<option value='stackexchange'>stackexchange</option>
+
+<option value='stackexchangemeta'>stackexchangemeta</option>
+
+<option value='stackoverflow' selected>stackoverflow</option>
+
+<option value='stackoverflowmeta'>stackoverflowmeta</option>
+
+<option value='stackoverflowstaging'>stackoverflowstaging</option>
+
+<option value='startups'>startups</option>
+
+<option value='startupsmeta'>startupsmeta</option>
+
+<option value='stats'>stats</option>
+
+<option value='statsmeta'>statsmeta</option>
+
+<option value='stellar'>stellar</option>
+
+<option value='stellarmeta'>stellarmeta</option>
+
+<option value='superuser'>superuser</option>
+
+<option value='superusermeta'>superusermeta</option>
+
+<option value='sustainability'>sustainability</option>
+
+<option value='sustainabilitymeta'>sustainabilitymeta</option>
+
+<option value='techcomm'>techcomm</option>
+
+<option value='techcommmeta'>techcommmeta</option>
+
+<option value='tex'>tex</option>
+
+<option value='texmeta'>texmeta</option>
+
+<option value='tor'>tor</option>
+
+<option value='tormeta'>tormeta</option>
+
+<option value='travel'>travel</option>
+
+<option value='travelmeta'>travelmeta</option>
+
+<option value='tridion'>tridion</option>
+
+<option value='tridionmeta'>tridionmeta</option>
+
+<option value='ukrainian'>ukrainian</option>
+
+<option value='ukrainianmeta'>ukrainianmeta</option>
+
+<option value='unix'>unix</option>
+
+<option value='unixmeta'>unixmeta</option>
+
+<option value='ux'>ux</option>
+
+<option value='uxmeta'>uxmeta</option>
+
+<option value='vegetarianism'>vegetarianism</option>
+
+<option value='vegetarianismmeta'>vegetarianismmeta</option>
+
+<option value='vi'>vi</option>
+
+<option value='video'>video</option>
+
+<option value='videometa'>videometa</option>
+
+<option value='vimeta'>vimeta</option>
+
+<option value='webapps'>webapps</option>
+
+<option value='webappsmeta'>webappsmeta</option>
+
+<option value='webmasters'>webmasters</option>
+
+<option value='webmastersmeta'>webmastersmeta</option>
+
+<option value='windowsphone'>windowsphone</option>
+
+<option value='windowsphonemeta'>windowsphonemeta</option>
+
+<option value='woodworking'>woodworking</option>
+
+<option value='woodworkingmeta'>woodworkingmeta</option>
+
+<option value='wordpress'>wordpress</option>
+
+<option value='wordpressmeta'>wordpressmeta</option>
+
+<option value='workplace'>workplace</option>
+
+<option value='workplacemeta'>workplacemeta</option>
+
+<option value='worldbuilding'>worldbuilding</option>
+
+<option value='worldbuildingmeta'>worldbuildingmeta</option>
+
+<option value='writing'>writing</option>
+
+<option value='writingmeta'>writingmeta</option>
+
+</select>
+
+<script>
+    $(function() {
+        var ddl = $('#footer select.skin, .footer select.skin, .js-footer select.skin');
+        var initialSkin = ddl.val();
+        if ($.cookie('css-override')) {
+            ddl.val('_local');
+        }
+
+        function setSkin() {
+            var changeSkin = initialSkin;
+            switch(ddl.val()) {
+                case '_cdn_local':
+                case '_cdn_change':
+                    $.cookie('cdn-domain', prompt('Designer CDN server (e.g. localhost:8080):', $.cookie('cdn-domain') || 'localhost:8080'));
+                    break;
+                case '_cdn_clear':
+                    $.cookie('cdn-domain', null);
+                    break;
+                case '_local':
+                case '_local_change':
+                    $.cookie('css-override', prompt('Local LESS path (e.g. http://localhost:8080/money/html/all.less):', $.cookie('css-override')));
+                    break;
+                case '_local_clear':
+                    $.cookie('css-override', null);
+                    break;
+                default:
+                    changeSkin = ddl.val();
+                    $.cookie('css-override', null); // sets null whenever a regular skin is selected
+                    break;
+            }
+
+            $.get('/change-skin', { skin: changeSkin }, function () {
+                location.reload(true);
+            });
+        }
+
+        ddl.change(setSkin);
+        $(document).keydown(function(e) {
+            // ctrl-alt-p (previous), ctrl-alt-n (next)
+            if (!(e.ctrlKey && e.altKey && (e.which === 78 || e.which === 80)))
+                return;
+            var sel = ddl.find(':selected');
+            if (e.which === 78)
+                sel = sel.next();
+            else
+                sel = sel.prev();
+            ddl.val(sel.val());
+            setSkin();
+        });
+    });
+</script></div>
+                                    <div class="grid--cell mr4">NY-WEB10</div>
+                        <div class="grid--cell mr4">via NY-LB06</div>
+                    <div class="grid--cell">(Site Id: 1)</div>
+                        <div class="grid--cell ml4">
+                            <a class="js-fastly-cookie"></a>
+                            <script>
+                                // https://stackoverflow.com/c/stack-overflow/questions/201/202#202
+                                StackExchange.ready(function() {
+                                    var cookieName = 'fastly-dc',
+                                        curVal = $.cookie(cookieName),
+                                        newVal = null,
+                                        prompt = 'point to default DC';
+
+                                    if (!curVal) { // can currently only point to CO
+                                        newVal = 'co';
+                                        prompt = 'point to CO';
+                                    }
+                                    $('.js-fastly-cookie').text(prompt).click(function() {
+                                        $.cookie(cookieName, newVal);
+                                        window.location.reload();
+                                    });
+                                })
+                            </script>
+                        </div>
+            </div>
+    </footer>
+    <noscript>
+        <div id="noscript-warning">Stack Overflow works best with JavaScript enabled
+        </div>
+    </noscript>
+
+            <script async type="text/javascript" id="mini-profiler" src="/mini-profiler-resources/includes.js?v=Aui3dzK2894/R4HUIPFKQX2NEsCIEjFZ5JHtKI8sQno=" data-version="Aui3dzK2894/R4HUIPFKQX2NEsCIEjFZ5JHtKI8sQno=" data-path="/mini-profiler-resources/" data-current-id="c0857c23-283e-434d-937b-2f4e34947f36" data-ids="c0857c23-283e-434d-937b-2f4e34947f36" data-position="right" data-trivial="false" data-children="false" data-max-traces="15" data-controls="false" data-authorized="true" data-toggle-shortcut="Alt+P" data-start-hidden="false" data-trivial-milliseconds="2"></script>
+
+    </body>
+</html>
